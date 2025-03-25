@@ -100,5 +100,20 @@ namespace MyMvcApp.Controllers
             userlist.Remove(user);
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: User/Search
+        public ActionResult Search(string query)
+        {
+            if (string.IsNullOrEmpty(query))
+            {
+                return View("Index", userlist); // Si no hay consulta, muestra todos los usuarios
+            }
+
+            var results = userlist.Where(u => 
+                u.Name.Contains(query, StringComparison.OrdinalIgnoreCase) || 
+                u.Email.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            return View("Index", results); // Reutiliza la vista Index para mostrar los resultados
+        }
     }
 }
